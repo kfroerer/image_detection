@@ -5,8 +5,7 @@ defmodule Heb.Imagga.Test do
 
   describe "get_tags/1" do
     test "returns a 200 HTTP response" do
-      assert %HTTPoison.Response{} = Adapter.get_tags(%{})
+      assert %HTTPoison.Response{} = Heb.Imagga.get_tags(%{})
     end
   end
-
 end

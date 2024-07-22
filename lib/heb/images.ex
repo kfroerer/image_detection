@@ -17,6 +17,7 @@ defmodule Heb.Images do
       [%Image{}, ...]
 
   """
+  @spec list_images :: [Image.t()]
   def list_images do
     Repo.all(Image)
   end
@@ -35,6 +36,7 @@ defmodule Heb.Images do
       ** (Ecto.NoResultsError)
 
   """
+  @spec get_image!(String.t()) :: Image.t()
   def get_image!(id), do: Repo.get!(Image, id)
 
   @doc """
@@ -49,6 +51,7 @@ defmodule Heb.Images do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_image(map()) :: {:ok, Image.t()} | {:error, Ecto.Changeset.t()}
   def create_image(attrs \\ %{}) do
     %Image{}
     |> Image.changeset(attrs)
@@ -71,6 +74,19 @@ defmodule Heb.Images do
     image
     |> Image.changeset(attrs)
     |> Repo.update()
+  end
+
+  @doc """
+  Searches the database for any images matching any incoming args.
+
+  Args are strings.
+  When multiple tags are given as args, preference is given to images that have all tags, then singular tags ordered alphabetically.
+  """
+  @spec find_matching_images([String.t()]) :: [Image.t()]
+  def find_matching_images(tags_to_search) do
+    %Image{}
+    # |> where([i], i.tags in ^tags_to_search)
+    |> Repo.all()
   end
 
   @doc """

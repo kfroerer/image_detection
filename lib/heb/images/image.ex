@@ -2,6 +2,8 @@ defmodule Heb.Images.Image do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{}
+
   schema "images" do
     field :label, :string
     field :uri, :string

@@ -1,9 +1,11 @@
 defmodule Heb.Imagga.Live do
   @behaviour Heb.Imagga.Adapter
+  require Logger
 
   # get the api key and put it in the config?
   # get the api url
 
+  @impl Heb.Imagga.Adapter
   def get_tags(args) do
     headers = [
       "Content-Type": "application/json",
@@ -19,11 +21,11 @@ defmodule Heb.Imagga.Live do
         response
 
       {:ok, %{status_code: 401} = reason} ->
-        Crowbar.Logger.error("some reason", reason: reason)
+        Logger.error("Error Code 401: #{reason}")
         nil
 
       {:error, %HTTPoison.Error{reason: reason}} ->
-        Crowbar.Logger.error("unknown reason ", reason: reason)
+        Logger.error("Other Error: #{reason}")
         nil
     end
   end
