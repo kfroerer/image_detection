@@ -19,6 +19,7 @@ defmodule HebWeb.ImageController do
   end
 
   def create(conn, %{"image_url" => image_url}) do
+    text(conn, "post is working")
     # implement 3rd party API here
     Heb.Imagga.get_image_tags_by_url(image_url)
 
