@@ -38,7 +38,9 @@ Although most requests should be made via Postman or in the terminal via `curl`,
 
 #### Imagga
 
-This application uses Imagga to tag images. An api key is required to authenticate POST requests. For details on creating an API key please consult: [https://docs.imagga.com/?shell#getting-started](https://docs.imagga.com/?shell#getting-started). (Or email me, a key can be provided)
+This application uses Imagga to tag images. An api key is required to authenticate POST requests. For details on creating an API key please consult: [https://docs.imagga.com/?shell#getting-started](https://docs.imagga.com/?shell#getting-started). (Or email me, a key can be provided).
+
+Once you have an api key, add it to `/config/secret.exs` as: `config :heb, api_key: "<your api key>"`
 
 #### Tests
 
@@ -48,10 +50,6 @@ The entire test suite can be run via `mix test` and will run with mocked API res
 
 See `resources/curl.text` for example `curl` commands.
 
-## Learn more
+## Caveats
 
-- Official website: https://www.phoenixframework.org/
-- Guides: https://hexdocs.pm/phoenix/overview.html
-- Docs: https://hexdocs.pm/phoenix
-- Forum: https://elixirforum.com/c/phoenix-forum
-- Source: https://github.com/phoenixframework/phoenix
+The request to upload a local image (and subsequently search for objects) is still a WIP as I was out of town 6/7 days this week. I started initial implementation but didn't finish :/
