@@ -13,22 +13,20 @@ defmodule Heb.Imagga do
     ]
   end
 
-  # TODO: handle local files, move into adapter.
-  @spec get_image_tags_by_url(String.t()) :: [String.t()] | {:error, HTTPoison.Error.t()}
+  @spec get_image_tags_by_url(String.t()) :: {:ok, [String.t()]} | {:error, HTTPoison.Error.t()}
   def get_image_tags_by_url(image_url) do
-    # {:ok, binary} = File.read("lib/resources/DSC_0150.jpg")
     url = @base_url <> "tags?image_url=" <> image_url
     headers = get_headers()
-    response = HTTPoison.get(url, headers)
+    response = HTTPoison.get(url, headers) |> IO.inspect()
     handle_tag_response(response)
   end
 
-  @spec handle_tag_response(responses) :: [String.t()] | {:error, HTTPoison.Error.t()}
+  @spec handle_tag_response(responses) :: {:ok, [String.t()]} | {:error, HTTPoison.Error.t()}
   def handle_tag_response(response) do
     case response do
       {:ok, %{status_code: 200, body: body}} ->
         with {:ok, decoded_body} <- Jason.decode(body, keys: :atoms) do
-          parse_result_for_tags(decoded_body.result)
+          {:ok, parse_result_for_tags(decoded_body.result)}
         end
 
       {:ok, %{status_code: status_code} = response} ->

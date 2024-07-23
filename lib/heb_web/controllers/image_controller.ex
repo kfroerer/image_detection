@@ -18,11 +18,18 @@ defmodule HebWeb.ImageController do
   end
 
   def create(conn, %{"image_url" => image_url, "detect_objects" => true} = params) do
-    tags = Heb.Imagga.get_image_tags_by_url(image_url)
-    default_label = if not Enum.empty?(tags), do: hd(tags), else: "unknown label"
-    label = Map.get(params, "label", default_label)
-    {:ok, image} = Images.create_image(%{tags: tags, uri: image_url, label: label})
-    handle_created_image(conn, image)
+    with {:ok, tags} <- Heb.Imagga.get_image_tags_by_url(image_url) do
+      default_label = if not Enum.empty?(tags), do: hd(tags), else: "unknown label"
+      label = Map.get(params, "label", default_label)
+      {:ok, image} = Images.create_image(%{tags: tags, uri: image_url, label: label})
+      handle_created_image(conn, image)
+    else
+      {:error, _err} ->
+        conn
+        |> put_status(:bad_request)
+        |> put_view(HebWeb.ErrorJSON)
+        |> render("400.json", [])
+    end
   end
 
   def create(conn, %{"image_url" => image_url, "detect_objects" => false} = params) do
