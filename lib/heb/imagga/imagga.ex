@@ -1,4 +1,5 @@
 defmodule Heb.Imagga do
+  alias Heb.Imagga.Adapter
   require Logger
 
   @base_url "https://api.imagga.com/v2/"
@@ -7,14 +8,16 @@ defmodule Heb.Imagga do
           | {:error, HTTPoison.Error.t()}
 
   def get_headers() do
+    api_key = Application.get_env(:heb, :api_key)
+
     [
-      {"Authorization",
-       "Basic " <> api_key}
+      {"Authorization", "Basic " <> api_key}
     ]
   end
 
   @spec get_image_tags_by_url(String.t()) :: {:ok, [String.t()]} | {:error, HTTPoison.Error.t()}
   def get_image_tags_by_url(image_url) do
+    # Heb.Imagga.Adapter.get_tags(image_url)
     url = @base_url <> "tags?image_url=" <> image_url
     headers = get_headers()
     response = HTTPoison.get(url, headers) |> IO.inspect()
@@ -44,10 +47,11 @@ defmodule Heb.Imagga do
   end
 
   def make_upload_request(file_path) do
+    api_key = Application.get_env(:heb, :api_key)
+
     headers =
       [
-        {"Authorization",
-         "Basic " <> api_key},
+        {"Authorization", "Basic " <> api_key},
         {"Content-Type", "multipart/form-data"},
         multipart: :multipart
       ]

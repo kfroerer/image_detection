@@ -2,6 +2,7 @@ defmodule Heb.Images.Image do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:label, :uri, :tags]}
   @type t :: %__MODULE__{}
 
   schema "images" do
