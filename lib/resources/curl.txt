@@ -1,0 +1,22 @@
+curl -iX POST http://localhost:4000/images \
+   -H 'Content-Type: application/json' \
+   -d '{"image_url":"https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg", "detect_objects":true}'
+
+curl -iX POST http://localhost:4000/images \
+   -H 'Content-Type: application/json' \
+   -d '{"image_url":"https://www.planetware.com/wpimages/2020/03/world-most-beautiful-waterfalls-iguazu-falls.jpg", "detect_objects":true}'
+
+curl -iX POST http://localhost:4000/images \
+   -H 'Content-Type: application/json' \
+   -d '{"image_url":"https://storage.googleapis.com/api4ai-static/rapidapi/general_detection/demo-pic.jpg", "detect_objects":true, "label": "some other label"}'
+
+curl -iX POST http://localhost:4000/images \
+   -H 'Content-Type: application/json' \
+   -d '{"image_url":"https://imagga.com/static/images/tagging/wind-farm-538576_640.jpg", "label": "some label"}'
+
+
+curl http://localhost:4000/images?objects="energy,wind"
+
+curl http://localhost:4000/images/1
+
+curl http://localhost:4000/images

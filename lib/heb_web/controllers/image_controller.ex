@@ -32,7 +32,7 @@ defmodule HebWeb.ImageController do
     end
   end
 
-  def create(conn, %{"image_url" => image_url, "detect_objects" => false} = params) do
+  def create(conn, %{"image_url" => image_url} = params) do
     label = Map.get(params, "label", "unknown_label")
 
     {:ok, image} = Images.create_image(%{uri: image_url, label: label})
@@ -46,7 +46,7 @@ defmodule HebWeb.ImageController do
     text(conn, "encode working")
   end
 
-  def create(conn, %{"image_file" => file, "detect_objects" => false} = params) do
+  def create(conn, %{"image_file" => file} = params) do
     text(conn, "no objects detected")
   end
 
