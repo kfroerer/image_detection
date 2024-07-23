@@ -21,5 +21,6 @@ defmodule HebWeb.Router do
     post "/images", ImageController, :create
     get "/images/:id", ImageController, :show
     get "/images:params", ImageController, :index
+    get "/", ImageController, :index
   end
 end

@@ -12,7 +12,8 @@ defmodule Heb.ImagesFixtures do
       attrs
       |> Enum.into(%{
         label: "some label",
-        uri: "some uri"
+        uri: "some uri",
+        tags: ["dog", "cat"]
       })
       |> Heb.Images.create_image()
 

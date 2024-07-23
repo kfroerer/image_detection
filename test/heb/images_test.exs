@@ -57,5 +57,13 @@ defmodule Heb.ImagesTest do
       image = image_fixture()
       assert %Ecto.Changeset{} = Images.change_image(image)
     end
+
+    test "find_matching_images" do
+      image_fixture()
+      [first_image | _] = Images.find_matching_images(["dog"])
+      assert Enum.any?(first_image.tags, fn tag -> tag == "dog" end)
+
+      assert [] = Images.find_matching_images(["woman"])
+    end
   end
 end

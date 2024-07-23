@@ -18,7 +18,7 @@ defmodule Heb.Imagga do
   def get_image_tags_by_url(image_url) do
     url = @base_url <> "tags?image_url=" <> image_url
     headers = get_headers()
-    response = HTTPoison.get(url, headers) |> IO.inspect()
+    response = HTTPoison.get(url, headers)
     handle_tag_response(response)
   end
 
