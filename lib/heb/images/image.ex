@@ -16,6 +16,6 @@ defmodule Heb.Images.Image do
   def changeset(image, attrs) do
     image
     |> cast(attrs, [:uri, :label, :tags])
-    |> validate_required([:uri, :label, :tags])
+    |> validate_required([:uri, :label])
   end
 end

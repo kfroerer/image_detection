@@ -1,22 +1,10 @@
 defmodule Heb.Imagga do
   require Logger
-  alias Heb.Imagga.Adapter
-  alias Heb.Images
 
   @base_url "https://api.imagga.com/v2/"
   @type responses ::
           {:ok, HTTPoison.Response.t()}
           | {:error, HTTPoison.Error.t()}
-
-  # TODO: handle local files, move into adapter.
-  @spec get_image_tags_by_url(String.t()) :: [String.t()] | {:error, HTTPoison.Error.t()}
-  def get_image_tags_by_url(image_url) do
-    # {:ok, binary} = File.read("lib/resources/DSC_0150.jpg")
-    url = @base_url <> "tags?image_url=" <> image_url
-    headers = get_headers()
-    response = HTTPoison.get(url, headers)
-    handle_response(response)
-  end
 
   def get_headers() do
     [
@@ -25,8 +13,18 @@ defmodule Heb.Imagga do
     ]
   end
 
-  @spec handle_response(responses) :: [String.t()] | {:error, HTTPoison.Error.t()}
-  def handle_response(response) do
+  # TODO: handle local files, move into adapter.
+  @spec get_image_tags_by_url(String.t()) :: [String.t()] | {:error, HTTPoison.Error.t()}
+  def get_image_tags_by_url(image_url) do
+    # {:ok, binary} = File.read("lib/resources/DSC_0150.jpg")
+    url = @base_url <> "tags?image_url=" <> image_url
+    headers = get_headers()
+    response = HTTPoison.get(url, headers)
+    handle_tag_response(response)
+  end
+
+  @spec handle_tag_response(responses) :: [String.t()] | {:error, HTTPoison.Error.t()}
+  def handle_tag_response(response) do
     case response do
       {:ok, %{status_code: 200, body: body}} ->
         with {:ok, decoded_body} <- Jason.decode(body, keys: :atoms) do
@@ -41,6 +39,33 @@ defmodule Heb.Imagga do
         Logger.error("Imagga request error")
         {:error, response_error}
     end
+  end
+
+  def get_image_tags_from_file(file_path) do
+    make_upload_request(file_path)
+  end
+
+  def make_upload_request(file_path) do
+    headers =
+      [
+        {"Authorization",
+         "Basic " <> api_key},
+        {"Content-Type", "multipart/form-data"},
+        multipart: :multipart
+      ]
+
+    body =
+      {:multipart,
+       [
+         {:file, file_path,
+          {"form-data", [{:name, "image"}, {:filename, Path.basename(file_path)}]}, []}
+       ]}
+
+    HTTPoison.post(
+      @base_url <> "uploads",
+      body,
+      headers
+    )
   end
 
   @spec parse_result_for_tags(map()) :: [Strings.t()]
