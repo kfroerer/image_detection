@@ -7,6 +7,7 @@ defmodule Heb.Images.Image do
   schema "images" do
     field :label, :string
     field :uri, :string
+    field :tags, {:array, :string}
 
     timestamps(type: :utc_datetime)
   end
@@ -14,7 +15,7 @@ defmodule Heb.Images.Image do
   @doc false
   def changeset(image, attrs) do
     image
-    |> cast(attrs, [:uri, :label])
-    |> validate_required([:uri, :label])
+    |> cast(attrs, [:uri, :label, :tags])
+    |> validate_required([:uri, :label, :tags])
   end
 end

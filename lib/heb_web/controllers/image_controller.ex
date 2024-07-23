@@ -6,11 +6,10 @@ defmodule HebWeb.ImageController do
 
   action_fallback HebWeb.FallbackController
 
-  def index(conn, %{"objects" => objects} = params) do
-    text(conn, "This is working")
-    IO.inspect(params)
-    # parse the params to get the args after the 'objects'
-    # Images.find_matching_images(params)
+  def index(conn, %{"objects" => objects}) do
+    query_tags = String.split(objects, ",")
+    images = Images.find_matching_images(query_tags)
+    render(conn, :index, images: images)
   end
 
   def index(conn, _params) do
@@ -19,16 +18,16 @@ defmodule HebWeb.ImageController do
   end
 
   def create(conn, %{"image_url" => image_url}) do
-    text(conn, "post is working")
-    # implement 3rd party API here
-    Heb.Imagga.get_image_tags_by_url(image_url)
+    tags = Heb.Imagga.get_image_tags_by_url(image_url)
 
-    # with {:ok, %Image{} = image} <- Images.create_image(image_params) do
-    #   conn
-    #   |> put_status(:created)
-    #   |> put_resp_header("location", ~p"/images/#{image}")
-    #   |> render(:show, image: image)
-    # end
+    if not Enum.empty?(tags) do
+      {:ok, image} = Images.create_image(%{tags: tags, uri: image_url, label: hd(tags)})
+
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", ~p"/images/#{image}")
+      |> render(:show, image: image)
+    end
   end
 
   def show(conn, %{"id" => id}) do

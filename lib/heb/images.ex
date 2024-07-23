@@ -83,9 +83,9 @@ defmodule Heb.Images do
   When multiple tags are given as args, preference is given to images that have all tags, then singular tags ordered alphabetically.
   """
   @spec find_matching_images([String.t()]) :: [Image.t()]
-  def find_matching_images(tags_to_search) do
-    %Image{}
-    # |> where([i], i.tags in ^tags_to_search)
+  def find_matching_images(list_of_strings) do
+    Image
+    |> where([i], fragment("? && ?", ^list_of_strings, i.tags))
     |> Repo.all()
   end
 

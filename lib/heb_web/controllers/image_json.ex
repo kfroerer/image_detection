@@ -19,7 +19,8 @@ defmodule HebWeb.ImageJSON do
     %{
       id: image.id,
       uri: image.uri,
-      label: image.label
+      label: image.label,
+      tags: image.tags
     }
   end
 end
